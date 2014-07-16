@@ -11,6 +11,7 @@ Bobby Nyotta - 2013-2014 - OrganJet
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8ndKa5KGrRbe6feO4v4M2dODOw8w5_Q0&sensor=false"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="js/maps.js"></script>
     <script src="retrieve-data-hardcoded-liver.js"></script>
     <script src="retrieve-data-hardcoded-kidney.js"></script>
 
@@ -27,33 +28,11 @@ Bobby Nyotta - 2013-2014 - OrganJet
         ,markersArray = []
         ,url_srt = 'http://maps.googleapis.com/maps/api/geocode/json?address='
         ,url_end = '&sensor=false'
-        ,iconL = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=L|12f404|000000'
-        ,iconR = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=R|63D1F4|000000'
-        ,iconK = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=C|FFAA00|000000'
-        ,iconO = 'https://chart.googleapis.com/chart?chst=d_map_spin&chld=.75|0|FFFF00|11|_|O'
         ,organ = ""
 				,type = ""
-        ,legendDiv = document.createElement('DIV')
         ,selections = []
 				,selections_DD = []
 				,List_NoDD=[];
-
-    legendDiv.id = "legend";
-
-    var map
-        ,geocoder;
-
-    // creates map
-    function initialize() {
-      var opts = {
-        center: new google.maps.LatLng(39.8282, -98.5795), //center of america
-        zoom: 4,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      map = new google.maps.Map(document.getElementById('map-canvas'), opts);
-      geocoder = new google.maps.Geocoder();
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legendDiv);
-    }
 
     // The bulk of the app -- most of the pre-processing is done here.
     function calculateDistances(z) {
@@ -130,10 +109,10 @@ Bobby Nyotta - 2013-2014 - OrganJet
 						calculate_DD(zip_obj.name,selections_DD);
 					}
 
-					setTimeout(function () { map.fitBounds(bounds) } ,1000); //zoom based on the LatLngBounds object
+					setTimeout(function () { OJ.Maps.map.fitBounds(bounds) } ,1000); //zoom based on the LatLngBounds object
 
 					description();
-					legend();
+					OJ.Maps.showLegend();
 
 					addCircle(3);
 					addCircle(2);
@@ -264,17 +243,17 @@ Bobby Nyotta - 2013-2014 - OrganJet
       console.log(isDestination);
       var icon;
       if (isDestination == '_Low') {        // low-wait
-        icon = iconL;
+        icon = OJ.Maps.icons.lowWait;
       } else if (isDestination == '_Reg') { // regular
-        icon = iconR;
+        icon = OJ.Maps.icons.reg;
       } else if (isDestination == '_Kid') { // children's center
-        icon = iconK;
+        icon = OJ.Maps.icons.kid;
       } else {															// zip code
-        icon = iconO;
+        icon = OJ.Maps.icons.origin;
       }
       // add markers using lat/lng
       var marker = new google.maps.Marker({
-        map: map,
+        map: OJ.Maps.map,
         position: new google.maps.LatLng(obj.lat, obj.lng),
         icon: icon,
         title: obj.name
@@ -286,7 +265,7 @@ Bobby Nyotta - 2013-2014 - OrganJet
         ,maxWidth: 0
       });
       google.maps.event.addListener(marker, 'click', function() {
-        marker.infowindow.open(map, marker);
+        marker.infowindow.open(OJ.Maps.map, marker);
       });
 
       markersArray.push(marker); // add marker to array
@@ -305,7 +284,7 @@ Bobby Nyotta - 2013-2014 - OrganJet
 				strokeWeight: 2,
 				fillColor: color,
 				fillOpacity: 0.15,
-				map: map,
+				map: OJ.Maps.map,
 				center: new google.maps.LatLng(zip_obj.lat, zip_obj.lng),
 				radius: hours*595457
       });
@@ -392,31 +371,10 @@ Bobby Nyotta - 2013-2014 - OrganJet
       $('#post-table-text').show();
     }
 
-    // adding legend to the map
-    function legend() {
-      // Set CSS for the control border
-      legendDiv.style.padding = '5px';
-      legendDiv.style.backgroundColor = 'white';
-      legendDiv.style.opacity = '0.75';
-      legendDiv.style.borderStyle = 'solid';
-      legendDiv.style.borderWidth = '1px';
-
-      // Set CSS for the control text
-      legendDiv.style.fontFamily = 'Arial,sans-serif';
-      legendDiv.style.fontSize = '12px';
-
-      // Add the text
-      legendDiv.innerHTML = '<p style="text-align:center;line-height:50%"><b>LEGEND</b></p>' +
-        '<p><img src="' + iconO + '" />' + '  Your Location</p>'
-        + '<p><img src="' + iconL + '" />' + '  Low-Wait Center</p>'
-        + '<p><img src="' + iconR + '" />' + '  Regular Center</p>'
-        + '<p><img src="' + iconK + '" />' + '  Children\'s Center</p>';
-    }
-
     // Returns the longitude and latitude from a zip code
     // Also contains some validation
     function getCoordFromZip(z, afterResultParsing) {
-      geocoder.geocode( { 'address': z}, function(results, status) {
+      OJ.Maps.geocoder.geocode( { 'address': z}, function(results, status) {
         if (status != "OK") { // make sure zip code is valid
           zip_obj.name=null;
           zip_obj.add=null;
@@ -442,7 +400,9 @@ Bobby Nyotta - 2013-2014 - OrganJet
       });
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    google.maps.event.addDomListener(window, 'load', function(){
+      OJ.Maps.init();
+    });
 
     </script>
   </head>
