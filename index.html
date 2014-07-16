@@ -308,8 +308,8 @@ Bobby Nyotta - 2013-2014 - OrganJet
       $('#results-table-f').hide();
       $('#results-table-f thead').empty();
       $('#results-table-f tbody').empty();
-      $('#description').empty();
-      $('#disclaimer').empty();
+      $('#description .inner').hide();
+      $('#disclaimer .inner').hide();
       $('#legend').empty();
 
       for (var i = 0; i < markersArray.length; i++) {
@@ -352,22 +352,8 @@ Bobby Nyotta - 2013-2014 - OrganJet
 
     // All of the text that comes below the results table is in here. This is not dynamic at all.
     function description() {
-      var descrip = $('#description');
-
-      descrip.append("<p>Pin Colors Legend:</p>");
-      descrip.append("<ul><li>Yellow Pin - Location of Your Zip Code</li><li>Green Pin - Locations of the closest low wait time transplant centers</li><li>Blue Pin - Locations of the closest regular transplant centers</li><li>Orange Pin - Locations of the closest children's transplant centers</li></ul>");
-
-      descrip.append("<p>The concentric circles show areas that are approximately one, two, and three hour flying times from your home zip code.</p>");
-      descrip.append("<p>Flying times larger than 3 hours are not accessible via light/medium jets due to fuel requirements.</p>");
-      descrip.append("<p>'Estimated Flying Time' is computed through a heuristic formula that uses latitude and longitude information and average flight speeds of a light jet. Actual flying time depends on several factors such as prevailing winds, specific aircraft type, weather and number of passengers.</p>");
-      descrip.append("<p>The 'pick up' time for a private jet from an airport near your home is typically about three to four hours. Thus, the <i>total time</i> to reach your transplant center is the estimated flying time <i>plus</i> the pick up time <i>plus</i> the driving time from the drop off airport to the transplant center.</p>");
-      descrip.append("<p>The transplant center locations were obtained from <a href='http://www.srtr.org' target='_blank'>Scientific Registry of Transplant Recipients</a>.</p>");
-      descrip.append("<p>VA hospitals are not included in our lists. Information about VA centers can be found <a href='http://www.va.gov/TRANSPLANT/' target='_blank'>here</a>.</p>");
-      descrip.append("<p>The map in this application is supported by Google Maps Javascript API V3, which has strict usage limitations.</p>");
-
-      var disclaim = $('#disclaimer');
-      disclaim.append("OrganJet and GuardianWings do not provide medical advice. All information presented here is for educational/awareness purposes only. Please consult your physician before taking any action. Every effort has been made to furnish accurate and most up to date summarized data based on publicly available information.");
-
+      $('#description .inner').show();
+      $('#disclaimer .inner').show();
       $('#post-table-text').show();
     }
 
@@ -467,8 +453,43 @@ Bobby Nyotta - 2013-2014 - OrganJet
 
     <div class='row'> <!-- contains post-table text div's-->
       <div id="post-table-text" class="hide span10 offset1 well">
-        <p id="description"></p>
-        <p id="disclaimer"></p>
+        <p id="description">
+          <div class="inner">
+            <p>Pin Colors Legend:</p>
+            <ul>
+              <li>Yellow Pin - Location of Your Zip Code</li>
+              <li>Green Pin - Locations of the closest low wait time transplant centers</li>
+              <li>Blue Pin - Locations of the closest regular transplant centers</li>
+              <li>Orange Pin - Locations of the closest children's transplant centers</li>
+            </ul>
+            <p>
+              The concentric circles show areas that are approximately one, two, and three hour flying times from your home zip code.
+            </p>
+            <p>
+              Flying times larger than 3 hours are not accessible via light/medium jets due to fuel requirements.
+            </p>
+            <p>
+              'Estimated Flying Time' is computed through a heuristic formula that uses latitude and longitude information and average flight speeds of a light jet. Actual flying time depends on several factors such as prevailing winds, specific aircraft type, weather and number of passengers.
+            </p>
+            <p>
+              The 'pick up' time for a private jet from an airport near your home is typically about three to four hours. Thus, the <i>total time</i> to reach your transplant center is the estimated flying time <i>plus</i> the pick up time <i>plus</i> the driving time from the drop off airport to the transplant center.
+            </p>
+            <p>
+              The transplant center locations were obtained from <a href='http://www.srtr.org' target='_blank'>Scientific Registry of Transplant Recipients</a>.
+            </p>
+            <p>
+              VA hospitals are not included in our lists. Information about VA centers can be found <a href='http://www.va.gov/TRANSPLANT/' target='_blank'>here</a>.
+            </p>
+            <p>
+              The map in this application is supported by Google Maps Javascript API V3, which has strict usage limitations.
+            </p>
+          </div>
+        </p>
+        <p id="disclaimer">
+          <div class="inner">
+            OrganJet and GuardianWings do not provide medical advice. All information presented here is for educational/awareness purposes only. Please consult your physician before taking any action. Every effort has been made to furnish accurate and most up to date summarized data based on publicly available information.
+          </div>
+        </p>
       </div>
     </div>
 
